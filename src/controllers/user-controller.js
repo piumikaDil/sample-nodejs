@@ -15,7 +15,7 @@ module.exports = {
         userValidate.ValidateString(password),
         userValidate.ValidateString(role))
       ) {
-        const result = await userService.createUser(req.body);
+        const result = await userService.createUser(req);
         console.log("RESULT : " + JSON.stringify(result));
         if (!result.success) {
           res.status(400).send({
