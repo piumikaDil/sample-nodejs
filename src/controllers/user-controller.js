@@ -1,3 +1,4 @@
+const { isErrored } = require("stream");
 const userService = require("../services/user-service");
 const userValidate = require("../validator/user-validate");
 module.exports = {
@@ -29,7 +30,10 @@ module.exports = {
         });
       }
     } catch (error) {
-      console.error(error);
+      console.error(error.message);
+      res.status(500).send({
+        message: error.message,
+      });
     }
   },
 };
