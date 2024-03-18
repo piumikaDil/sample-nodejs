@@ -8,7 +8,9 @@ const model = require('../models/user-model');
 
 const router = express.Router();
 
-router.get('/', controller.get);
-router.post('/',upload.single('image'), controller.createUser);
+router
+  .get("/", controller.get)
+  .post("/", controller.createUser)
+  .put("/", upload.single("image"), controller.updateuserImage);
 
 module.exports = router;

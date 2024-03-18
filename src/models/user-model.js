@@ -28,6 +28,7 @@ const userSchema = new Schema(
     },
 
     image: {
+      public_id:String,
       url: String,
     },
   },

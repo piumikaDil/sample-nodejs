@@ -36,4 +36,18 @@ module.exports = {
       });
     }
   },
+  updateuserImage: async function (req, res) {
+    try {
+      const result =await userService.updateUserImage(req);
+      if (result.success) {
+        res.send(JSON.stringify(result));
+      } else {
+        res.status(400).send({
+          message: result.message,
+        });
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  },
 };
