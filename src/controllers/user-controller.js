@@ -6,7 +6,7 @@ module.exports = {
     console.log("get Success");
   },
   createUser: async (req, res) => {
-    console.log(req.body);
+    console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAA : ", req.body);
     const { email, name, role, password } = req.body;
     try {
       if (
@@ -38,7 +38,7 @@ module.exports = {
   },
   updateuserImage: async function (req, res) {
     try {
-      const result =await userService.updateUserImage(req);
+      const result = await userService.updateUserImage(req);
       if (result.success) {
         res.send(JSON.stringify(result));
       } else {
@@ -48,6 +48,24 @@ module.exports = {
       }
     } catch (error) {
       console.error(error.message);
+    }
+  },
+
+  userLogin: async (req, res) => {
+    try {
+      const result = await userService.userLogin(req, res);
+      console.log("Result >>>>>>>> : ", result);
+      if (!result.success) {
+        res.status(400).send({
+          message: result.message,
+        });
+      }
+      if (result.success === true) {
+        // res.json(result,"Login success!");
+        res.status(200).send({ result });
+      }
+    } catch (error) {
+      console.error(error);
     }
   },
 };

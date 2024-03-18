@@ -11,6 +11,7 @@ const router = express.Router();
 router
   .get("/", controller.get)
   .post("/", controller.createUser)
-  .put("/", upload.single("image"), controller.updateuserImage);
+  .put("/", upload.single("image"), controller.updateuserImage)
+  .post("/login", controller.userLogin);
 
 module.exports = router;

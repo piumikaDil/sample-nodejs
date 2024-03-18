@@ -17,7 +17,7 @@ app.use(bodyParser.json());
 
 app.use('/user', routes);
 
-app.listen(process.env.PORT || 3000, function() {
+app.listen(process.env.PORT || 3500, function() {
 	console.log('Express app running on port ' + (process.env.PORT || 3000))
 });
 

@@ -3,6 +3,9 @@ const { storage } = require("../dbConfig/cloudinary-config");
 const multer = require("multer");
 const upload = multer({ storage });
 const cloudinary = require("../dbConfig/cloudinary-config");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+// const bcrypt = require("bcrypt");
 
 module.exports = {
   get: async (req, res) => {
@@ -11,10 +14,11 @@ module.exports = {
 
   createUser: async (req) => {
     const { email } = req.body;
+    console.log(req.body);
     try {
       const existUser = await User.findOne({ email });
       if (existUser === null) {
-        const user = new User(userImage);
+        const user = new User(req.body);
         const data = await user.save();
         console.log(data);
         return { data: data, statusCode: 201, success: true };
@@ -55,20 +59,54 @@ module.exports = {
         },
         { new: true }
       );
-	  if(user ){
-		return { data: user, statusCode: 201, success: true };
-	  }else{
-		return { success: false,statusCode:400, message: "User not found" };
-	  }
+      if (user) {
+        return { data: user, statusCode: 201, success: true };
+      } else {
+        return { success: false, statusCode: 400, message: "User not found" };
+      }
     } catch (error) {
       logger.error(error);
-	  throw error;
+      throw error;
+    }
+  },
+
+  userLogin: async (req, res) => {
+    try {
+      const { email, password } = req.body;
+
+      const user = await User.findOne({ email });
+      if (!user) {
+        return {
+          data: user,
+          statusCode: 400,
+          success: false,
+          message: "User not found",
+        };
+      }
+      //   console.log(".....................", password.trim);
+      //   console.log(".....................", user.password);
+      //   const passwordMatch = await bcrypt.compare(String(password),String(user.password));
+
+      //   console.log(">>>>>>>>>>>>>>>>>>>>>>> : ", passwordMatch);
+      if (password.trim() !== user.password.trim()) {
+        return {
+          data: user,
+          statusCode: 401,
+          success: false,
+          message: "Authentication failed",
+        };
+      }
+      const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY, {
+        expiresIn: "1h",
+      });
+      return {
+        data: token,
+        statusCode: 200,
+        success: true,
+        message: "Login Success!",
+      };
+    } catch (error) {
+      console.error(error);
     }
   },
 };
-
-//   if (!user)
-//     return res.json({
-//       success: false,
-//       message: 'user not found, with the given email!',
-//     });
